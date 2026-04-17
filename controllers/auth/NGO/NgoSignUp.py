@@ -1,5 +1,5 @@
 from fastapi import HTTPException
-from app.db.database import users_collection, ngo_collection
+from app.db.db import users_collection, ngo_collection
 from app.core.security import hash_password, verify_password, create_access_token
 
 async def signup_ngo(data):

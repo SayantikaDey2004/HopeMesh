@@ -3,9 +3,9 @@ from app.Schemas.Users.signUpSchema import UserSignUpSchema
 from app.Schemas.NGO.signUpSchema import NgoSignUpSchema
 from app.Schemas.logInSchema import loginSchema
 from app.Schemas.token import Token
-from app.auths.Users.userSignUp import signup_user
-from app.auths.NGO.NgoSignUp import signup_ngo
-from app.auths.LogIn import login_user
+from app.controllers.auth.Users.userSignUp import signup_user
+from app.controllers.auth.NGO.NgoSignUp import signup_ngo
+from app.controllers.auth.LogIn import login_user
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
