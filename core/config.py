@@ -11,6 +11,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 class Settings(BaseSettings):
     APP_NAME: str = "AI Powered Need Detection and Volunteer Matching"
     NODE_ENV: str = "dev"
+    GENAI_API_KEY: str
     DB_DEV: Optional[str] = None
     DB_LOCAL: Optional[str] = None
     DB_PROD: Optional[str] = None

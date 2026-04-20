@@ -3,9 +3,21 @@ from typing import List, Literal, Optional
 from pydantic import BaseModel
 
 
+class SurveyDataControlAINeedAnalysisSchema(BaseModel):
+    need_type: str
+    urgency: Literal["Low", "Medium", "High", "Critical", "Unknown"]
+    resources: List[str]
+
+
+class SurveyDataControlAIOutputSchema(BaseModel):
+    description: str
+    ai_analysis: SurveyDataControlAINeedAnalysisSchema
+
+
 class SurveyDataControlCreateResponseSchema(BaseModel):
     message: str
     survey_id: str
+    ai_need_output: SurveyDataControlAIOutputSchema
 
 
 class SurveyDataControlItemSchema(BaseModel):
@@ -46,6 +58,7 @@ class SurveyDataControlItemSchema(BaseModel):
         "Within a week",
     ]
     contact_preference: Literal["Phone", "Email"]
+    ai_need_output: SurveyDataControlAIOutputSchema
     created_at: str
 
 
