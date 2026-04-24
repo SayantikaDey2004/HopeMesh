@@ -6,6 +6,7 @@ from app.routers.authRouter import router as auth_router
 from app.routers.dashboardRouter import router as dashboard_router
 from app.routers.historyRouter import router as history_router
 from app.routers.notificationRouter import router as notification_router
+from app.routers.staffNotificationRouter import router as staff_notification_router
 from app.routers.surveyDataControlRouter import router as survey_data_control_router
 from app.routers.volunteerMatchingRouter import router as volunteer_matching_router
 from app.api.v1.routes.email import router as email_router
@@ -20,6 +21,7 @@ app.include_router(auth_router)
 app.include_router(dashboard_router)
 app.include_router(history_router)
 app.include_router(notification_router)
+app.include_router(staff_notification_router)
 app.include_router(survey_data_control_router)
 app.include_router(volunteer_matching_router)
 app.include_router(email_router)

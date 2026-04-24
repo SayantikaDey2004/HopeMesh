@@ -115,9 +115,11 @@ async def _resolve_recipient_user_id(volunteer_id: str) -> tuple[str, Optional[D
 def _build_notification_message(need: Dict[str, Any], volunteer_name: str) -> str:
     need_type = _normalize_text(need.get("need_type") or "General Need")
     urgency = _normalize_urgency(need.get("urgency"))
+    need_location = _normalize_text(need.get("location") or "Unknown location")
     safe_name = _normalize_text(volunteer_name) or "Volunteer"
     return (
-        f"Hi {safe_name}, you have a new matched task ({need_type}) with {urgency} urgency. "
+        f"Hi {safe_name}, you are matched for need '{need_type}' at '{need_location}' "
+        f"with {urgency} urgency. "
         "Please accept or reject this task."
     )
 
@@ -135,6 +137,7 @@ def _serialize_notification(document: Dict[str, Any]) -> Dict[str, Any]:
         "notification_id": _normalize_text(document.get("_id") or document.get("notification_id")),
         "ngo_id": _normalize_text(document.get("ngo_id")),
         "need_id": _normalize_text(document.get("need_id")),
+        "need_location": _normalize_text(document.get("need_location")),
         "volunteer_id": _normalize_text(document.get("volunteer_id")),
         "recipient_user_id": _normalize_text(document.get("recipient_user_id")),
         "volunteer_name": _normalize_text(document.get("volunteer_name")) or "Volunteer",
@@ -160,11 +163,13 @@ async def create_notifications_for_ranked_volunteers(
         return {"created": 0, "skipped": 0}
 
     need_id = _normalize_text(need.get("need_id"))
+    need_location = _normalize_text(need.get("location"))
     need_type = _normalize_text(need.get("need_type")) or "Unknown"
     urgency = _normalize_urgency(need.get("urgency"))
 
     created_count = 0
     skipped_count = 0
+    newly_assigned_volunteers: List[Dict[str, Any]] = []
 
     for volunteer in ranked_volunteers:
         if not isinstance(volunteer, dict):
@@ -197,6 +202,7 @@ async def create_notifications_for_ranked_volunteers(
         notification_document = {
             "ngo_id": ngo_id,
             "need_id": need_id,
+            "need_location": need_location,
             "volunteer_id": volunteer_id,
             "recipient_user_id": recipient_user_id,
             "volunteer_name": volunteer_name,
@@ -227,11 +233,20 @@ async def create_notifications_for_ranked_volunteers(
             continue
 
         created_count += 1
+        newly_assigned_volunteers.append(
+            {
+                "volunteer_id": volunteer_id,
+                "volunteer_name": volunteer_name,
+            }
+        )
 
         websocket_payload = json.dumps(
             {
                 "type": "task_notification",
                 "need_id": need_id,
+                "need_location": need_location,
+                "need_type": need_type,
+                "urgency": urgency,
                 "task_status": "pending",
                 "message": message,
                 "recipient_user_id": recipient_user_id,
@@ -240,6 +255,20 @@ async def create_notifications_for_ranked_volunteers(
         )
         try:
             await manager.send_personal_message(recipient_user_id, websocket_payload)
+        except Exception:
+            pass
+
+    if newly_assigned_volunteers:
+        try:
+            from app.services.staffNotification.StaffNotification import (
+                create_staff_notifications_for_ranked_volunteers,
+            )
+
+            staff_payload = {
+                **ranked_result,
+                "ranked_volunteers": newly_assigned_volunteers,
+            }
+            await create_staff_notifications_for_ranked_volunteers(staff_payload, ngo_id)
         except Exception:
             pass
 
@@ -449,6 +478,20 @@ async def update_notification_task_status(
 
     serialized_notification = _serialize_notification(document)
 
+    try:
+        from app.services.staffNotification.StaffNotification import (
+            create_staff_notifications_for_task_status_change,
+        )
+
+        await create_staff_notifications_for_task_status_change(
+            notification_document=document,
+            task_status=serialized_notification["task_status"],
+            ngo_id=ngo_id,
+            triggered_by_user_id=user_id,
+        )
+    except Exception:
+        pass
+
     websocket_payload = json.dumps(
         {
             "type": "task_status_updated",
@@ -532,6 +575,20 @@ async def process_pending_notification_timeouts(
         claimed_document = await notifications_collection.find_one({"_id": notification_internal_id})
         if not claimed_document:
             continue
+
+        try:
+            from app.services.staffNotification.StaffNotification import (
+                create_staff_notifications_for_task_status_change,
+            )
+
+            await create_staff_notifications_for_task_status_change(
+                notification_document=claimed_document,
+                task_status="rejected",
+                ngo_id=_normalize_text(claimed_document.get("ngo_id")),
+                triggered_by_user_id="system_timeout",
+            )
+        except Exception:
+            pass
 
         rematch_result = await _trigger_replacement_match(
             claimed_document,

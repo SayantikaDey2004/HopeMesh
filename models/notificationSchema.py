@@ -7,6 +7,7 @@ class VolunteerNotificationItemSchema(BaseModel):
     notification_id: str
     ngo_id: str
     need_id: str
+    need_location: str
     volunteer_id: str
     recipient_user_id: str
     volunteer_name: str
