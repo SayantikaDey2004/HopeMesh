@@ -400,7 +400,11 @@ async def _fetch_need_document(data, ngo_id: str) -> Dict[str, Any]:
     return document
 
 
-async def _fetch_available_volunteers(ngo_id: str, max_volunteers: int) -> List[Dict[str, Any]]:
+async def _fetch_available_volunteers(
+    ngo_id: str,
+    max_volunteers: int,
+    excluded_volunteer_ids: List[str] | None = None,
+) -> List[Dict[str, Any]]:
     available_query = {
         "$or": [
             {"is_available": True},
@@ -441,8 +445,18 @@ async def _fetch_available_volunteers(ngo_id: str, max_volunteers: int) -> List[
             max_volunteers
         ).to_list(length=max_volunteers)
 
+    excluded_ids = {
+        _normalize_text(volunteer_id)
+        for volunteer_id in (excluded_volunteer_ids or [])
+        if _normalize_text(volunteer_id)
+    }
+
     normalized = [_normalize_volunteer(document) for document in documents]
-    return [item for item in normalized if item["volunteer_id"]]
+    return [
+        item
+        for item in normalized
+        if item["volunteer_id"] and item["volunteer_id"] not in excluded_ids
+    ]
 
 
 def _rank_volunteers_with_gemini(
@@ -461,10 +475,15 @@ async def rank_volunteers_for_document(
     ngo_id: str,
     max_volunteers: int = 50,
     max_ranked_results: int = 10,
+    excluded_volunteer_ids: List[str] | None = None,
 ) -> Dict[str, Any]:
     need = _extract_need_payload(need_document)
 
-    volunteers = await _fetch_available_volunteers(ngo_id, max_volunteers)
+    volunteers = await _fetch_available_volunteers(
+        ngo_id,
+        max_volunteers,
+        excluded_volunteer_ids=excluded_volunteer_ids,
+    )
     if not volunteers:
         return {
             "message": "No available volunteers found for this NGO",
@@ -525,5 +544,12 @@ async def rank_volunteers_for_need(data, ngo_id: str) -> Dict[str, Any]:
                 }
             },
         )
+
+    try:
+        from app.services.notification.Notification import create_notifications_for_ranked_volunteers
+
+        await create_notifications_for_ranked_volunteers(ranked_result, ngo_id)
+    except Exception:
+        pass
 
     return ranked_result
