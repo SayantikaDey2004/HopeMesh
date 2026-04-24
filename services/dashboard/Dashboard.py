@@ -1,12 +1,30 @@
 from app.db.db import needs_collection, volunteers_collection
 
 
-async def get_dashboard_summary():
-    active_needs_query = {
+def _build_ngo_scope_query(ngo_id: str):
+    return {
         "$or": [
-            {"status": "active"},
-            {"status": "open"},
-            {"is_active": True},
+            {"ngo_id": ngo_id},
+            {"ngoId": ngo_id},
+            {"organization_id": ngo_id},
+            {"organizationId": ngo_id},
+        ]
+    }
+
+
+async def get_dashboard_summary(ngo_id: str):
+    ngo_scope_query = _build_ngo_scope_query(ngo_id)
+
+    active_needs_query = {
+        "$and": [
+            ngo_scope_query,
+            {
+                "$or": [
+                    {"status": "active"},
+                    {"status": "open"},
+                    {"is_active": True},
+                ]
+            },
         ]
     }
 
@@ -24,10 +42,15 @@ async def get_dashboard_summary():
     }
 
     available_volunteers_query = {
-        "$or": [
-            {"is_available": True},
-            {"status": "available"},
-            {"availability": "available"},
+        "$and": [
+            ngo_scope_query,
+            {
+                "$or": [
+                    {"is_available": True},
+                    {"status": "available"},
+                    {"availability": "available"},
+                ]
+            },
         ]
     }
 
@@ -45,20 +68,32 @@ async def get_dashboard_summary():
     }
 
 
-async def auto_match_now(data):
+async def auto_match_now(data, ngo_id: str):
+    ngo_scope_query = _build_ngo_scope_query(ngo_id)
+
     active_needs_query = {
-        "$or": [
-            {"status": "active"},
-            {"status": "open"},
-            {"is_active": True},
+        "$and": [
+            ngo_scope_query,
+            {
+                "$or": [
+                    {"status": "active"},
+                    {"status": "open"},
+                    {"is_active": True},
+                ]
+            },
         ]
     }
 
     available_volunteers_query = {
-        "$or": [
-            {"is_available": True},
-            {"status": "available"},
-            {"availability": "available"},
+        "$and": [
+            ngo_scope_query,
+            {
+                "$or": [
+                    {"is_available": True},
+                    {"status": "available"},
+                    {"availability": "available"},
+                ]
+            },
         ]
     }
 
@@ -83,7 +118,12 @@ async def auto_match_now(data):
         volunteer = volunteers[index]
 
         await needs_collection.update_one(
-            {"_id": need["_id"]},
+            {
+                "$and": [
+                    {"_id": need["_id"]},
+                    ngo_scope_query,
+                ]
+            },
             {
                 "$set": {
                     "status": "matched",
@@ -93,7 +133,12 @@ async def auto_match_now(data):
         )
 
         await volunteers_collection.update_one(
-            {"_id": volunteer["_id"]},
+            {
+                "$and": [
+                    {"_id": volunteer["_id"]},
+                    ngo_scope_query,
+                ]
+            },
             {"$set": {"is_available": False}},
         )
 
