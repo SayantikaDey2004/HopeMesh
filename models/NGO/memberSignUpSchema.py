@@ -9,6 +9,7 @@ class NgoMemberSignUpSchema(BaseModel):
     password: str = Field(..., min_length=6)
     ngo_id: str = Field(..., min_length=1)
     identity_type: Literal["staff", "volunteer"]
+    role_id: Optional[str] = None
     skill: Optional[
         Literal[
             "Food shortage",

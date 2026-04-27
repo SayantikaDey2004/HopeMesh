@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import Literal
+from typing import Literal, Optional
 
 
 class VolunteerSignUpSchema(BaseModel):
@@ -17,3 +17,4 @@ class VolunteerSignUpSchema(BaseModel):
     ] = Field(..., description="Volunteer's primary skill")
     contact_number: str = Field(default="", description="Volunteer contact number")
     location: str = Field(default="", description="Volunteer location")
+    user_id: Optional[str] = None

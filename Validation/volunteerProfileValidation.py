@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field, EmailStr
-from typing import Literal
+from typing import Literal, Optional
 
 class VolunteerProfileValidationSchema(BaseModel):
     name: str = Field(..., min_length=1, max_length=255)
@@ -16,3 +16,4 @@ class VolunteerProfileValidationSchema(BaseModel):
     ]
     contact_number: str = Field(default="", description="Volunteer contact number")
     location: str = Field(default="", description="Volunteer location")
+    user_id: Optional[str] = None

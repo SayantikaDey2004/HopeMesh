@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field
+from typing import Optional
 
 
 class StaffSignUpSchema(BaseModel):
@@ -8,3 +9,4 @@ class StaffSignUpSchema(BaseModel):
     ngo_id: str = Field(..., description="NGO ID this staff belongs to")
     designation: str = Field(default="Staff", description="Staff designation/role")
     contact_number: str = Field(default="", description="Staff contact number")
+    user_id: Optional[str] = None

@@ -1,4 +1,6 @@
 from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from typing import Literal
 from app.models.Users.signUpSchema import UserSignUpSchema
 from app.models.NGO.signUpSchema import NgoSignUpSchema
 from app.models.NGO.memberSignUpSchema import NgoMemberSignUpSchema
@@ -18,8 +20,14 @@ from app.services.auth.ResetPassword import (
     reset_password,
     validate_reset_password_token,
 )
+from app.services.auth.user_id import generate_next_ngo_member_id
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
+
+
+class GenerateRoleIdSchema(BaseModel):
+    ngo_id: str
+    identity_type: Literal["staff", "volunteer"]
 
 
 @router.post("/signup/user")
@@ -52,6 +60,7 @@ async def register_ngo_member(data: NgoMemberSignUpSchema):
             ngo_id=data.ngo_id,
             designation=data.designation,
             contact_number=data.contact_number,
+            user_id=data.role_id,
         )
         return await signup_staff(staff_payload)
 
@@ -66,8 +75,22 @@ async def register_ngo_member(data: NgoMemberSignUpSchema):
         skill=data.skill,
         contact_number=data.contact_number,
         location=data.location,
+        user_id=data.role_id,
     )
     return await signup_volunteer(volunteer_payload)
+
+
+@router.post("/signup/ngo-member/generate-role-id")
+async def generate_ngo_member_role_id(data: GenerateRoleIdSchema):
+    try:
+        role_id = await generate_next_ngo_member_id(data.ngo_id, data.identity_type)
+        return {
+            "role_id": role_id,
+            "identity_type": data.identity_type,
+            "ngo_id": data.ngo_id,
+        }
+    except ValueError as error:
+        raise HTTPException(status_code=400, detail=str(error))
 
 
 @router.post("/login", response_model=Token)
