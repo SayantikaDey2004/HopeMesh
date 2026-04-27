@@ -37,9 +37,10 @@ async def _generate_next_ngo_id(name: str) -> str:
 async def signup_ngo(data):
     # Validate input data
     validated_data = NGOProfileValidationSchema(**data.dict())
+    normalized_email = validated_data.email.strip().lower()
 
 
-    existing = await users_collection.find_one({"email": validated_data.email})
+    existing = await users_collection.find_one({"email": normalized_email})
     if existing:
         raise HTTPException(status_code=400, detail="User already exists")
 
@@ -51,7 +52,7 @@ async def signup_ngo(data):
     user = {
         "user_id": user_id,
         "name": validated_data.name,
-        "email": validated_data.email,
+        "email": normalized_email,
         "password": hash_password(validated_data.password),
         "role": "ngo_admin",
     }

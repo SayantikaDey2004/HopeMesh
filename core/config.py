@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     APP_NAME: str = "AI Powered Need Detection and Volunteer Matching"
     NODE_ENV: str = "dev"
     GENAI_API_KEY: str
+    DB_URL: Optional[str] = None
     DB_DEV: Optional[str] = None
     DB_LOCAL: Optional[str] = None
     DB_PROD: Optional[str] = None
@@ -32,12 +33,20 @@ class Settings(BaseSettings):
     def env(self) -> str:
         return (self.NODE_ENV or "dev").strip().lower()
 
+    @staticmethod
+    def _clean(value: Optional[str]) -> str:
+        return str(value or "").strip()
+
     @property
     def mongo_url(self) -> str:
+        explicit_url = self._clean(self.DB_URL)
+        if explicit_url:
+            return explicit_url
+
         db_connection_uri = {
-            "local": self.DB_LOCAL or "",
-            "dev": self.DB_DEV or "",
-            "prod": self.DB_PROD or "",
+            "local": self._clean(self.DB_LOCAL),
+            "dev": self._clean(self.DB_DEV),
+            "prod": self._clean(self.DB_PROD),
         }
 
         if self.env not in db_connection_uri or not db_connection_uri[self.env]:

@@ -1,4 +1,5 @@
 from fastapi import HTTPException
+import re
 from app.db.db import users_collection
 from app.core.security import verify_password, create_access_token
 
@@ -15,10 +16,26 @@ def _requires_role_id(user: dict) -> bool:
 
 async def login_user(data):
 
-    normalized_email = _normalize_text(data.email).lower()
+    normalized_identifier = _normalize_text(data.email)
+    normalized_email = normalized_identifier.lower()
     provided_role_id = _normalize_text(getattr(data, "role_id", None))
 
-    user = await users_collection.find_one({"email": normalized_email})
+    user = await users_collection.find_one({
+        "$or": [
+            {
+                "email": {
+                    "$regex": f"^{re.escape(normalized_email)}$",
+                    "$options": "i",
+                }
+            },
+            {
+                "user_id": {
+                    "$regex": f"^{re.escape(normalized_identifier)}$",
+                    "$options": "i",
+                }
+            },
+        ]
+    })
 
     if not user:
         raise HTTPException(status_code=400, detail="Invalid credentials")

@@ -11,6 +11,7 @@ async def signup_volunteer(data):
     """Create a new volunteer for an NGO."""
     # Validate input data
     validated_data = VolunteerProfileValidationSchema(**data.dict())
+    normalized_email = validated_data.email.strip().lower()
 
     # Verify NGO exists
 
@@ -20,7 +21,7 @@ async def signup_volunteer(data):
 
     # Check if email already exists
 
-    existing = await users_collection.find_one({"email": validated_data.email})
+    existing = await users_collection.find_one({"email": normalized_email})
     if existing:
         raise HTTPException(status_code=400, detail="Email already registered")
 
@@ -32,7 +33,7 @@ async def signup_volunteer(data):
     volunteer_user = {
         "user_id": user_id,
         "name": validated_data.name,
-        "email": validated_data.email,
+        "email": normalized_email,
         "password": hash_password(validated_data.password),
         "ngo_id": validated_data.ngo_id,
         "role": "volunteer",
@@ -50,7 +51,7 @@ async def signup_volunteer(data):
         "volunteer_id": user_id,
         "ngo_id": validated_data.ngo_id,
         "name": validated_data.name,
-        "email": validated_data.email,
+        "email": normalized_email,
         "skill": validated_data.skill,
         "contact_number": validated_data.contact_number,
         "location": validated_data.location,

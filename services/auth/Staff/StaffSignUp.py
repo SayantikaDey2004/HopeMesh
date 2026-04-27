@@ -11,6 +11,7 @@ async def signup_staff(data):
     """Create a new staff member for an NGO."""
     # Validate input data
     validated_data = StaffProfileValidationSchema(**data.dict())
+    normalized_email = validated_data.email.strip().lower()
 
     # Verify NGO exists
 
@@ -20,7 +21,7 @@ async def signup_staff(data):
 
     # Check if email already exists
 
-    existing = await users_collection.find_one({"email": validated_data.email})
+    existing = await users_collection.find_one({"email": normalized_email})
     if existing:
         raise HTTPException(status_code=400, detail="Email already registered")
 
@@ -32,7 +33,7 @@ async def signup_staff(data):
     staff_user = {
         "user_id": user_id,
         "name": validated_data.name,
-        "email": validated_data.email,
+        "email": normalized_email,
         "password": hash_password(validated_data.password),
         "ngo_id": validated_data.ngo_id,
         "role": "staff",
