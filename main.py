@@ -13,6 +13,7 @@ from app.api.v1.routes.email import router as email_router
 from app.core.config import get_settings
 from app.services.email.sendEmail import send_email
 from app.services.notification.Notification import run_pending_notification_rematch_worker
+from app.routers.signoutRouter import router as signout_router
 
 settings = get_settings()
 app = FastAPI(title=settings.APP_NAME)
@@ -25,7 +26,7 @@ app.include_router(staff_notification_router)
 app.include_router(survey_data_control_router)
 app.include_router(volunteer_matching_router)
 app.include_router(email_router)
-
+app.include_router(signout_router)
 
 @app.on_event("startup")
 async def startup_db_ping():
