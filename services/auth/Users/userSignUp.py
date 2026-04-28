@@ -1,7 +1,7 @@
 from fastapi import HTTPException
-from app.db.db import users_collection
-from app.core.security import hash_password
-from app.services.auth.user_id import generate_next_user_id
+from db.db import users_collection
+from core.security import hash_password
+from services.auth.user_id import generate_next_user_id
 
 
 # -------- USER SIGNUP --------

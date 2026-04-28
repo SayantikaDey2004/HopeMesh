@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends
 
-from app.Validation.volunteerMatchingValidation import (
+from Validation.volunteerMatchingValidation import (
     VolunteerMatchingValidationSchema,
 )
-from app.core.dependencies import get_current_ngo_id
-from app.models.volunteerMatchingSchema import VolunteerMatchResponseSchema
-from app.services.matching.VolunteerMatching import rank_volunteers_for_need
+from core.dependencies import get_current_ngo_id
+from models.volunteerMatchingSchema import VolunteerMatchResponseSchema
+from services.matching.VolunteerMatching import rank_volunteers_for_need
 
 router = APIRouter(prefix="/volunteer-matching", tags=["Volunteer Matching"])
 

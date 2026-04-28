@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, Response
 from fastapi.security import OAuth2PasswordBearer
-from app.models.token import Token
+from models.token import Token
 
 router = APIRouter()
 

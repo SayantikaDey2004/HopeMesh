@@ -3,7 +3,7 @@ from typing import Dict, List
 from bson import ObjectId
 from fastapi import HTTPException
 
-from app.db.db import survey_data_control_collection
+from db.db import survey_data_control_collection
 
 
 def _normalize_need_status(document: Dict) -> str:

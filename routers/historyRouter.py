@@ -2,10 +2,10 @@ from typing import Literal, Optional
 
 from fastapi import APIRouter, Depends, Query
 
-from app.Validation.historyValidation import HistoryQueryValidationSchema
-from app.core.dependencies import get_current_ngo_id
-from app.models.historySchema import HistoryListResponseSchema, HistoryNeedItemSchema
-from app.services.history.History import get_history_need_by_id, get_history_needs
+from Validation.historyValidation import HistoryQueryValidationSchema
+from core.dependencies import get_current_ngo_id
+from models.historySchema import HistoryListResponseSchema, HistoryNeedItemSchema
+from services.history.History import get_history_need_by_id, get_history_needs
 
 router = APIRouter(prefix="/history", tags=["History"])
 

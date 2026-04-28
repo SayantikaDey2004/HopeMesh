@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends
 
-from app.Validation.dashboardValidation import AutoMatchNowValidationSchema
-from app.core.dependencies import get_current_ngo_id
-from app.models.dashboardSchema import AutoMatchResultSchema, DashboardSchema
-from app.services.dashboard.Dashboard import auto_match_now, get_dashboard_summary
+from Validation.dashboardValidation import AutoMatchNowValidationSchema
+from core.dependencies import get_current_ngo_id
+from models.dashboardSchema import AutoMatchResultSchema, DashboardSchema
+from services.dashboard.Dashboard import auto_match_now, get_dashboard_summary
 
 router = APIRouter(prefix="/dashboard", tags=["Dashboard"])
 

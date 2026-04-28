@@ -1,8 +1,8 @@
 import sib_api_v3_sdk
 from sib_api_v3_sdk.rest import ApiException
 
-from app.core.config import settings
-from app.services.email.emailConfig import email_api
+from core.config import settings
+from services.email.emailConfig import email_api
 
 
 def send_email(

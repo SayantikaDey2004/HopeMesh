@@ -3,8 +3,8 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError, jwt
 from bson import ObjectId
 
-from app.core.config import settings
-from app.db.db import membership_collection, ngo_collection, users_collection
+from core.config import settings
+from db.db import membership_collection, ngo_collection, users_collection
 
 bearer_scheme = HTTPBearer(auto_error=False)
 

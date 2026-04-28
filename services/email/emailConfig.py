@@ -1,6 +1,6 @@
 import sib_api_v3_sdk
 
-from app.core.config import get_settings
+from core.config import get_settings
 
 settings = get_settings()
 

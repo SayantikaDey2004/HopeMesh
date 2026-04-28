@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 
 from jose import jwt
 
-from app.core.config import settings
+from core.config import settings
 
 
 RESET_TOKEN_EXPIRE_MINUTES = 30

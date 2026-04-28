@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 import re
-from app.db.db import users_collection
-from app.core.security import verify_password, create_access_token
+from db.db import users_collection
+from core.security import verify_password, create_access_token
 
 
 def _normalize_text(value: str | None) -> str:

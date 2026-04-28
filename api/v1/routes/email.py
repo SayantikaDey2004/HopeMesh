@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 
-from app.schemas.email import EmailRequest
-from app.services.brevo_email import send_email
+from schemas.email import EmailRequest
+from services.brevo_email import send_email
 
 router = APIRouter(prefix="/email", tags=["email"])
 

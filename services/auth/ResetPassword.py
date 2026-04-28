@@ -3,8 +3,8 @@ from datetime import datetime, timezone
 
 from fastapi import HTTPException
 
-from app.core.security import hash_password
-from app.db.db import password_reset_tokens_collection, users_collection
+from core.security import hash_password
+from db.db import password_reset_tokens_collection, users_collection
 
 
 def _hash_token(raw_token: str) -> str:

@@ -6,8 +6,8 @@ from typing import Any, Dict, List, Optional
 from bson import ObjectId
 from fastapi import HTTPException
 
-from app.core.websocketConfig import manager
-from app.db.db import (
+from core.websocketConfig import manager
+from db.db import (
     notifications_collection,
     survey_data_control_collection,
     users_collection,
@@ -260,7 +260,7 @@ async def create_notifications_for_ranked_volunteers(
 
     if newly_assigned_volunteers:
         try:
-            from app.services.staffNotification.StaffNotification import (
+            from services.staffNotification.StaffNotification import (
                 create_staff_notifications_for_ranked_volunteers,
             )
 
@@ -395,7 +395,7 @@ async def _trigger_replacement_match(
     if current_volunteer_id and current_volunteer_id not in excluded_volunteer_ids:
         excluded_volunteer_ids.append(current_volunteer_id)
 
-    from app.services.matching.VolunteerMatching import rank_volunteers_for_document
+    from services.matching.VolunteerMatching import rank_volunteers_for_document
 
     ranked_result = await rank_volunteers_for_document(
         need_document=need_document,
@@ -479,7 +479,7 @@ async def update_notification_task_status(
     serialized_notification = _serialize_notification(document)
 
     try:
-        from app.services.staffNotification.StaffNotification import (
+        from services.staffNotification.StaffNotification import (
             create_staff_notifications_for_task_status_change,
         )
 
@@ -577,7 +577,7 @@ async def process_pending_notification_timeouts(
             continue
 
         try:
-            from app.services.staffNotification.StaffNotification import (
+            from services.staffNotification.StaffNotification import (
                 create_staff_notifications_for_task_status_change,
             )
 

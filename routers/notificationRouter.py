@@ -2,17 +2,17 @@ from typing import Literal, Optional
 
 from fastapi import APIRouter, Depends, Query, WebSocket, WebSocketDisconnect
 
-from app.Validation.notificationValidation import (
+from Validation.notificationValidation import (
     VolunteerNotificationListValidationSchema,
     VolunteerNotificationStatusUpdateValidationSchema,
 )
-from app.core.dependencies import get_current_ngo_id, get_current_token_payload
-from app.core.websocketConfig import manager
-from app.models.notificationSchema import (
+from core.dependencies import get_current_ngo_id, get_current_token_payload
+from core.websocketConfig import manager
+from models.notificationSchema import (
     VolunteerNotificationListResponseSchema,
     VolunteerNotificationStatusUpdateResponseSchema,
 )
-from app.services.notification.Notification import (
+from services.notification.Notification import (
     get_volunteer_notifications,
     update_notification_task_status,
 )

@@ -1,19 +1,25 @@
 import asyncio
+import sys
+from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from app.db.db import client
-from app.routers.authRouter import router as auth_router
-from app.routers.dashboardRouter import router as dashboard_router
-from app.routers.historyRouter import router as history_router
-from app.routers.notificationRouter import router as notification_router
-from app.routers.staffNotificationRouter import router as staff_notification_router
-from app.routers.surveyDataControlRouter import router as survey_data_control_router
-from app.routers.volunteerMatchingRouter import router as volunteer_matching_router
-from app.api.v1.routes.email import router as email_router
-from app.core.config import get_settings
-from app.services.email.sendEmail import send_email
-from app.services.notification.Notification import run_pending_notification_rematch_worker
+
+# Add the parent directory to path so we can import from HopeMesh modules
+sys.path.insert(0, str(Path(__file__).parent))
+
+from db.db import client
+from routers.authRouter import router as auth_router
+from routers.dashboardRouter import router as dashboard_router
+from routers.historyRouter import router as history_router
+from routers.notificationRouter import router as notification_router
+from routers.staffNotificationRouter import router as staff_notification_router
+from routers.surveyDataControlRouter import router as survey_data_control_router
+from routers.volunteerMatchingRouter import router as volunteer_matching_router
+from api.v1.routes.email import router as email_router
+from core.config import get_settings
+from services.email.sendEmail import send_email
+from services.notification.Notification import run_pending_notification_rematch_worker
 
 settings = get_settings()
 app = FastAPI(title=settings.APP_NAME)

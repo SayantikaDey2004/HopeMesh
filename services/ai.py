@@ -4,7 +4,7 @@ from typing import Any, Dict, List
 
 from google import genai
 
-from app.core.config import get_settings
+from core.config import get_settings
 
 
 settings = get_settings()

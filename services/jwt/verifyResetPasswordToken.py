@@ -1,6 +1,6 @@
 from jose import JWTError, jwt
 
-from app.core.config import settings
+from core.config import settings
 
 
 def verify_reset_password_token(token: str) -> str:

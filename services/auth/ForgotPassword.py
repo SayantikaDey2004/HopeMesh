@@ -3,9 +3,9 @@ import secrets
 from datetime import datetime, timedelta, timezone
 from urllib.parse import quote
 
-from app.core.config import settings
-from app.db.db import password_reset_tokens_collection, users_collection
-from app.services.email.sendResetPasswordEmail import send_reset_password_email
+from core.config import settings
+from db.db import password_reset_tokens_collection, users_collection
+from services.email.sendResetPasswordEmail import send_reset_password_email
 
 
 GENERIC_FORGOT_PASSWORD_RESPONSE = {

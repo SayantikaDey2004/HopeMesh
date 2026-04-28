@@ -3,8 +3,8 @@ import json
 import asyncio
 from typing import List
 
-from app.db.db import users_collection
-from app.services.ai import client
+from db.db import users_collection
+from services.ai import client
 
 
 _ROLE_ID_PREFIX_MAP = {

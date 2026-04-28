@@ -1,4 +1,4 @@
-from app.models.signOutSchema import SignOutSchema
+from models.signOutSchema import SignOutSchema
 
 class SignOutValidationController:
     @staticmethod

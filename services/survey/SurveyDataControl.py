@@ -4,8 +4,8 @@ from typing import Any, Dict
 
 from fastapi import HTTPException
 
-from app.db.db import survey_data_control_collection
-from app.services.ai import analyze_survey_needs
+from db.db import survey_data_control_collection
+from services.ai import analyze_survey_needs
 
 
 def _normalize_ai_analysis(ai_analysis):

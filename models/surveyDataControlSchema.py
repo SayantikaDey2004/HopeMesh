@@ -2,7 +2,7 @@ from typing import List, Literal, Optional
 
 from pydantic import BaseModel
 
-from app.models.volunteerMatchingSchema import VolunteerMatchResponseSchema
+from models.volunteerMatchingSchema import VolunteerMatchResponseSchema
 
 
 class SurveyDataControlStatusSchema(BaseModel):

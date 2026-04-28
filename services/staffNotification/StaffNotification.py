@@ -4,8 +4,8 @@ from typing import Any, Dict, List, Optional
 
 from fastapi import HTTPException
 
-from app.core.websocketConfig import manager
-from app.db.db import membership_collection, staff_notifications_collection, users_collection
+from core.websocketConfig import manager
+from db.db import membership_collection, staff_notifications_collection, users_collection
 
 _ALLOWED_URGENCY = {"Low", "Medium", "High", "Critical", "Unknown"}
 _ALLOWED_TASK_STATUS = {"pending", "accepted", "rejected"}

@@ -8,8 +8,8 @@ from bson import ObjectId
 from fastapi import HTTPException
 from google import genai
 
-from app.core.config import get_settings
-from app.db.db import survey_data_control_collection, volunteers_collection
+from core.config import get_settings
+from db.db import survey_data_control_collection, volunteers_collection
 
 
 settings = get_settings()
@@ -546,7 +546,7 @@ async def rank_volunteers_for_need(data, ngo_id: str) -> Dict[str, Any]:
         )
 
     try:
-        from app.services.notification.Notification import create_notifications_for_ranked_volunteers
+        from services.notification.Notification import create_notifications_for_ranked_volunteers
 
         await create_notifications_for_ranked_volunteers(ranked_result, ngo_id)
     except Exception:

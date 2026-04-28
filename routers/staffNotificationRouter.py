@@ -2,11 +2,11 @@ from typing import Literal, Optional
 
 from fastapi import APIRouter, Depends, Query, WebSocket, WebSocketDisconnect
 
-from app.Validation.staffNotificationValidation import StaffNotificationListValidationSchema
-from app.core.dependencies import get_current_ngo_id, get_current_token_payload
-from app.core.websocketConfig import manager
-from app.models.staffNotificationSchema import StaffNotificationListResponseSchema
-from app.services.staffNotification.StaffNotification import get_staff_notifications_for_user
+from Validation.staffNotificationValidation import StaffNotificationListValidationSchema
+from core.dependencies import get_current_ngo_id, get_current_token_payload
+from core.websocketConfig import manager
+from models.staffNotificationSchema import StaffNotificationListResponseSchema
+from services.staffNotification.StaffNotification import get_staff_notifications_for_user
 
 router = APIRouter(prefix="/staff-notifications", tags=["Staff Notifications"])
 

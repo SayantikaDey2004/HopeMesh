@@ -1,10 +1,10 @@
 
 from fastapi import HTTPException
 import re
-from app.db.db import users_collection, ngo_collection, volunteers_collection
-from app.core.security import hash_password
-from app.services.auth.user_id import generate_next_ngo_member_id
-from app.Validation.volunteerProfileValidation import VolunteerProfileValidationSchema
+from db.db import users_collection, ngo_collection, volunteers_collection
+from core.security import hash_password
+from services.auth.user_id import generate_next_ngo_member_id
+from Validation.volunteerProfileValidation import VolunteerProfileValidationSchema
 
 
 

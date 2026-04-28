@@ -1,26 +1,26 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Literal
-from app.models.Users.signUpSchema import UserSignUpSchema
-from app.models.NGO.signUpSchema import NgoSignUpSchema
-from app.models.NGO.memberSignUpSchema import NgoMemberSignUpSchema
-from app.models.Staff.signUpSchema import StaffSignUpSchema
-from app.models.Volunteer.signUpSchema import VolunteerSignUpSchema
-from app.models.logInSchema import loginSchema
-from app.Validation.forgotPasswordValidation import ForgotPasswordValidationSchema
-from app.Validation.resetPasswordValidation import ResetPasswordValidationSchema
-from app.models.token import Token
-from app.services.auth.Users.userSignUp import signup_user
-from app.services.auth.NGO.NgoSignUp import signup_ngo
-from app.services.auth.Staff.StaffSignUp import signup_staff
-from app.services.auth.Volunteer.VolunteerSignUp import signup_volunteer
-from app.services.auth.LogIn import login_user
-from app.services.auth.ForgotPassword import forgot_password
-from app.services.auth.ResetPassword import (
+from models.Users.signUpSchema import UserSignUpSchema
+from models.NGO.signUpSchema import NgoSignUpSchema
+from models.NGO.memberSignUpSchema import NgoMemberSignUpSchema
+from models.Staff.signUpSchema import StaffSignUpSchema
+from models.Volunteer.signUpSchema import VolunteerSignUpSchema
+from models.logInSchema import loginSchema
+from Validation.forgotPasswordValidation import ForgotPasswordValidationSchema
+from Validation.resetPasswordValidation import ResetPasswordValidationSchema
+from models.token import Token
+from services.auth.Users.userSignUp import signup_user
+from services.auth.NGO.NgoSignUp import signup_ngo
+from services.auth.Staff.StaffSignUp import signup_staff
+from services.auth.Volunteer.VolunteerSignUp import signup_volunteer
+from services.auth.LogIn import login_user
+from services.auth.ForgotPassword import forgot_password
+from services.auth.ResetPassword import (
     reset_password,
     validate_reset_password_token,
 )
-from app.services.auth.user_id import generate_next_ngo_member_id
+from services.auth.user_id import generate_next_ngo_member_id
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 

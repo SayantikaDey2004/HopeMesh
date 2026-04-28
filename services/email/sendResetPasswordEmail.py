@@ -1,9 +1,9 @@
 import asyncio
 
-from app.services.email.generateResetPasswordEmailHTML import (
+from services.email.generateResetPasswordEmailHTML import (
     generate_reset_password_email_html,
 )
-from app.services.email.sendEmail import send_email
+from services.email.sendEmail import send_email
 
 
 async def send_reset_password_email(to_email: str, reset_link: str) -> None:

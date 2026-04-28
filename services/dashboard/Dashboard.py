@@ -1,4 +1,4 @@
-from app.db.db import needs_collection, volunteers_collection
+from db.db import needs_collection, volunteers_collection
 
 
 def _build_ngo_scope_query(ngo_id: str):

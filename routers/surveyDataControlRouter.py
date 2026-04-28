@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends, Query
 
-from app.Validation.surveyDataControlValidation import SurveyDataControlValidationSchema
-from app.core.dependencies import get_current_ngo_id
-from app.models.surveyDataControlSchema import (
+from Validation.surveyDataControlValidation import SurveyDataControlValidationSchema
+from core.dependencies import get_current_ngo_id
+from models.surveyDataControlSchema import (
     SurveyDataControlCreateResponseSchema,
     SurveyDataControlListResponseSchema,
 )
-from app.services.survey.SurveyDataControl import (
+from services.survey.SurveyDataControl import (
     create_survey_data_control,
     get_latest_survey_data_control_for_user,
     get_survey_data_controls,
